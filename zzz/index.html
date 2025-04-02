@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hollow Knight Mobile</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg') no-repeat center center/cover;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container, #loading-screen, #prank-message, #look-back, #mystery-text, #real-download, #nina-response {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        button {
+            background: #4b6b8b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #6a8bb7;
+        }
+        #loading-screen, #prank-message, #look-back, #mystery-text, #real-download, #nina-response {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #loading-screen, #prank-message, #look-back, #mystery-text, #nina-response {
+            background: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="content">
+        <h1>Baixe Hollow Knight Mobile!</h1>
+        <p>Clique no botão abaixo para iniciar o download.</p>
+        <button onclick="startDownload()">Baixar Agora</button>
+    </div>
+    
+    <div id="loading-screen">
+        <p>BAIXANDO... <span id="progress">0%</span></p>
+    </div>
+    
+    <div id="prank-message">PRIMEIRO DE ABRIL! 😂</div>
+    
+    <div id="look-back">Olhe pra trás...</div>
+    
+    <div id="mystery-text"></div>
+    
+    <div id="nina-response">
+        <button onclick="handleResponse(true)">SIM</button>
+        <button onclick="handleResponse(false)">NÃO</button>
+    </div>
+    
+    <div id="real-download">
+        <h1>Agora realmente está aqui o download!</h1>
+        <a id="download-link" href="https://drive.google.com/uc?export=download&id=1bQ_xXyXP-NEl2YgUSkyINl_lZ8HW0HZu" style="padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;" download>Baixar APK</a>
+    </div>
+    
+    <script>
+        function startDownload() {
+            document.getElementById('content').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'flex';
+            
+            let progress = 0;
+            let interval = setInterval(() => {
+                progress += 2;
+                document.getElementById('progress').innerText = progress + "%";
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').style.display = 'none';
+                        document.getElementById('prank-message').style.display = 'flex';
+                        
+                        setTimeout(() => {
+                            document.getElementById('prank-message').style.display = 'none';
+                            document.getElementById('look-back').style.display = 'flex';
+                            
+                            setTimeout(() => {
+                                document.getElementById('look-back').style.display = 'none';
+                                typeText("Você vê a Nina?", document.getElementById('mystery-text'), () => {
+                                    document.getElementById('nina-response').style.display = 'flex';
+                                });
+                            }, 10000);
+                        }, 5000);
+                    }, 1000);
+                }
+            }, 1200);
+        }
+        
+        function typeText(text, element, callback) {
+            element.innerHTML = '';
+            element.style.display = 'flex';
+            let i = 0;
+            let interval = setInterval(() => {
+                if (i < text.length) {
+                    element.innerHTML += text[i];
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 150);
+        }
+        
+        function handleResponse(yes) {
+            document.getElementById('mystery-text').style.display = 'none';
+            document.getElementById('nina-response').style.display = 'none';
+            
+            if (yes) {
+                document.getElementById('real-download').style.display = 'flex';
+            } else {
+                typeText("É, eu sei...", document.getElementById('mystery-text'), () => {
+                    setTimeout(() => {
+                        let flashes = 0;
+                        let flashInterval = setInterval(() => {
+                            document.body.style.background = flashes % 2 === 0 ? 'red' : 'black';
+                            flashes++;
+                            if (flashes >= 8) {
+                                clearInterval(flashInterval);
+                                document.body.style.background = 'black';
+                                setTimeout(() => {
+                                    let img = document.createElement('img');
+                                    img.src = 'https://imgur.com/a/piVJHzh';
+                                    img.style.maxWidth = '100%';
+                                    img.style.height = 'auto';
+                                    document.body.innerHTML = '';
+                                    document.body.appendChild(img);
+                                }, 3000);
+                            }
+                        }, 500);
+                    }, 1000);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
